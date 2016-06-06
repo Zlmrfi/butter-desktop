@@ -205,27 +205,8 @@
             var type = this.model.get('type');
             switch (type) {
             case 'bookmarkedmovie':
-                var SelectedMovie = new Backbone.Model({
-                    imdb_id: this.model.get('imdb_id'),
-                    image: this.model.get('image'),
-                    cover: this.model.get('cover'),
-                    torrents: this.model.get('torrents'),
-                    title: this.model.get('title'),
-                    genre: this.model.get('genre'),
-                    synopsis: this.model.get('synopsis'),
-                    runtime: this.model.get('runtime'),
-                    year: this.model.get('year'),
-                    health: this.model.get('health'),
-                    subtitle: this.model.get('subtitle'),
-                    backdrop: this.model.get('backdrop'),
-                    rating: this.model.get('rating'),
-                    trailer: this.model.get('trailer'),
-                    provider: this.model.get('provider'),
-                    watched: this.model.get('watched'),
-                    bookmarked: true,
-                });
-
-                App.vent.trigger('movie:showDetail', SelectedMovie);
+                this.model.set('bookmarked', true)
+                App.vent.trigger('movie:showDetail', this.model);
                 break;
 
             case 'bookmarkedshow':
@@ -371,7 +352,7 @@
                                     backdrop: undefined,
                                     rating: data.rating,
                                     trailer: false,
-                                    provider: that.model.get('provider'),
+                                    provider: provider,
                                 };
                                 movie.torrents = data.torrents;
                                 movie.genre = data.genre;
@@ -388,23 +369,7 @@
                             });
                     } else {
                         // Movie
-                        var movie = {
-                            imdb_id: this.model.get('imdb_id'),
-                            image: this.model.get('image'),
-                            cover: this.model.get('cover'),
-                            torrents: this.model.get('torrents'),
-                            title: this.model.get('title'),
-                            genre: this.model.get('genre'),
-                            synopsis: this.model.get('synopsis'),
-                            runtime: this.model.get('runtime'),
-                            year: this.model.get('year'),
-                            health: this.model.get('health'),
-                            subtitle: this.model.get('subtitle'),
-                            backdrop: this.model.get('backdrop'),
-                            rating: this.model.get('rating'),
-                            trailer: this.model.get('trailer'),
-                            provider: this.model.get('provider'),
-                        };
+                        var movie = this.model.attributes;
 
                         Database.addMovie(movie)
                             .then(function () {
@@ -434,7 +399,7 @@
                 } else {
                     data = provider.detail(this.model.get('imdb_id'), this.model.attributes)
                         .then(function (data) {
-                            data.provider = that.model.get('provider');
+                            data.provider = provider;
                             promisifyDb(db.tvshows.find({
                                     imdb_id: that.model.get('imdb_id').toString(),
                                 }))
