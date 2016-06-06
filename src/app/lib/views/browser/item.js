@@ -200,7 +200,7 @@
 
         showDetail: function (e) {
             e.preventDefault();
-            var provider = App.Providers.get(this.model.get('provider'));
+            var provider = this.model.get('provider');
             var data;
             var type = this.model.get('type');
             switch (type) {
@@ -303,7 +303,7 @@
             e.stopPropagation();
             e.preventDefault();
             var that = this;
-            var provider = App.Providers.get(this.model.get('provider'));
+            var provider = this.model.get('provider');
             var data;
 
             switch (this.model.get('type')) {
